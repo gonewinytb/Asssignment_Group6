@@ -1,0 +1,424 @@
+#include <iostream>
+#include <stdio.h>
+#include <ctype.h>
+#include <string>
+#include <fstream>
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef struct
+{
+		string ID_sp;
+		string ten_sp;
+	    int gia_sp;
+		int soluong;	
+} PRODUCT;
+
+typedef struct
+{
+		string ID_dh;
+		string ten_kh;
+		string sdt_kh;
+		string diachi;
+		PRODUCT ds[100];
+		string trangthai;
+		int sodv_sp;
+		int chietkhau;
+		int tongtien;
+} ORDER_INFORMATION;
+
+ORDER_INFORMATION dh[100];
+PRODUCT ds_sp[100];
+int so_sp=0,so_dh=0,i,j,e;
+
+void doc()
+{
+   fstream f;
+   f.open("sanpham.txt",ios::in);
+   f>>so_sp;
+   for(i=0;i<so_sp;i++)
+   {
+       f>>ds_sp[i].ID_sp>>ds_sp[i].ten_sp>>ds_sp[i].gia_sp;          
+   }
+   f.close();  
+   f.open("donhang.txt",ios::in);
+   f>>so_dh;
+   for(i=0;i<so_dh;i++)
+   {
+       f>>dh[i].ID_dh>>dh[i].sdt_kh>>dh[i].sodv_sp;
+	   fflush(stdin);
+	   getline(f,dh[i].ten_kh);
+	   getline(f,dh[i].ten_kh);    
+	   fflush(stdin);
+	   getline(f,dh[i].diachi);
+	   fflush(stdin);
+	   getline(f,dh[i].trangthai); 
+	   for(j=0;j<dh[i].sodv_sp;j++) 
+	   {
+	       f>>dh[i].ds[j].ID_sp>>dh[i].ds[j].soluong;	   
+	   } 
+	   f>>dh[i].chietkhau>>dh[i].tongtien;  
+   }
+   f.close();  
+}
+void luusp()
+{   
+    fstream f;
+	f.open("sanpham.txt",ios::out);
+	if(so_sp>0)
+	{
+	f<<so_sp<<"\n";
+	for(i=0;i<so_sp;i++)
+	{
+	    f<<ds_sp[i].ID_sp<<" "<<ds_sp[i].ten_sp<<" "<<ds_sp[i].gia_sp<<"\n";
+	}
+	}
+	else f<<so_sp;
+	f.close();
+}
+void luudh()
+{
+    fstream f;
+	f.open("donhang.txt",ios::out);
+	f<<so_dh<<"\n";
+    for(i=0;i<so_dh;i++)
+    {    
+	    f<<dh[i].ID_dh<<" "<<dh[i].sdt_kh<<" "<<dh[i].sodv_sp<<"\n"<<dh[i].ten_kh<<"\n"<<dh[i].diachi<<"\n"<<dh[i].trangthai<<"\n";
+	    for(j=0;j<dh[i].sodv_sp;j++)
+	        f<<dh[i].ds[j].ID_sp<<" "<<dh[i].ds[j].soluong<<"\n";
+	    f<<dh[i].chietkhau<<" "<<dh[i].tongtien<<"\n";
+	}
+    f.close();
+}
+void xuat_sp()
+{
+    printf("\n     ID            Ten           Gia       ");
+   	for(i=0;i<so_sp;i++)
+    cout<<"\n  "<<ds_sp[i].ID_sp<<"        "<<ds_sp[i].ten_sp<<"        "<<ds_sp[i].gia_sp; 
+}
+void xuat_dh(int i)
+{ 
+    printf("\nThong tin don hang ");
+	cout<<"\nID : "<<dh[i].ID_dh;
+	cout<<"\nTen khach hang : "<<dh[i].ten_kh;
+	cout<<"\nSDT khach hang : "<<dh[i].sdt_kh;
+	cout<<"\nDia chi giao hang : "<<dh[i].diachi;
+	cout<<"\nTrang thai don hang : "<<dh[i].trangthai;
+	cout<<"\nDanh sach san pham : ";
+	cout<<"\nSTT       ID        So luong ";
+	for(j=0;j<dh[i].sodv_sp;j++)
+		cout<<"\n"<<j+1<<"        "<<dh[i].ds[j].ID_sp<<"      "<<dh[i].ds[j].soluong;
+	cout<<"\nChiet khau giam gia : "<<dh[i].chietkhau;
+	cout<<"\nTong tien : "<<dh[i].tongtien<<"\n";
+}
+int main()
+{	
+    int choice;
+    doc();
+    printf("CHAO MUNG DEN VOI OMS  ");
+    do
+	{   
+	    printf("\n1. Them, cap nhat, xoa san pham\n2. Them don hang\n3. Liet ke tat ca cac san pham theo thu tu bang chu cai tu 'A' den 'Z'\n4. Liet ke tat ca don dat hang trong 1 thang nhat dinh \n5. Hien thi thong tin don dat hang theo ID\n6. Sap xep san pham theo thu tu tang dan cua gia\n7. Tinh so luong san pham ban duoc trong thang, nhom theo tung san pham\n8. Tim 5 san pham ban chay nhat trong mot khoang thoi gian cu the\n9. Thoat\nNhap muc ban chon :");
+		scanf("%d",&choice);
+	    switch(choice)
+	    {
+	    	case 9:
+	    		printf("\nGood bye");
+	    		break;
+	    	case 1:
+	    		int choice1;
+	    		do
+	    		{
+	    		printf("\n1. Them san pham\n2. Cap nhat san pham\n3. Xoa san pham\n4. Thoat \nNhap muc ban chon :");
+	    		scanf("%d",&choice1);
+	    		switch(choice1)
+	    		{
+	    			case 4:
+	    				break;
+	    			case 1:
+	    				printf("Nhap ID san pham ");
+	    				cin>>ds_sp[so_sp].ID_sp;   				
+	    				printf("Nhap ten san pham ");
+	    				cin>>ds_sp[so_sp].ten_sp;
+	    				printf("Nhap gia san pham ");	    				
+	    				scanf("%d",&ds_sp[so_sp].gia_sp);
+	    				printf("Them moi san pham thanh cong \n");
+	    				so_sp++;
+	    				luusp();
+	    				break;
+	    			case 2:
+	    				if(so_sp==0) printf("Khong co san pham de cap nhat \n");
+	    				else 
+	    				{   char ID_tam[6];
+	    			     	printf("Nhap ID san phan can cap nhat ");
+	    				    cin>>ID_tam;
+	    				    for(i=0;i<so_sp;i++) 
+	    				        if(ID_tam==ds_sp[i].ID_sp) 
+	    				            break;
+	    				    if(i==so_sp) printf("Khong ton tai san pham co ID %s\n",ID_tam);
+	    				    else
+	    				    {   int choice12;
+	    				        do
+	    				        {
+	    				            printf("\n1. Cap nhat ID san pham \n2. Cap nhat ten san pham\n3. Cap nhat gia san pham\n4. Thoat\nNhap muc ban chon :");
+	    				            scanf("%d",&choice12);
+	    				            switch(choice12)
+	    				            {
+	    					            case 4:
+	    					            	break;
+									    case 1:
+	    						            printf("Nhap ID moi cua san pham ");
+	    						            cin>>ds_sp[i].ID_sp;
+	    						            luusp();
+	    						            break;
+	    						        case 2:
+	    						    	    printf("Nhap ten moi cua san pham ");
+	    						    	    cin>>ds_sp[i].ten_sp;
+	    						    	    luusp();
+	    						    	    break;
+	    						        case 3:
+	    						            printf("Nhap gia moi cua san pham ");
+	    						    	    scanf("%d",&ds_sp[i].gia_sp); 
+											luusp(); 
+	    						    	    break;
+										default:
+										    printf("Chon sai, vui long chon lai !\n");	
+	    					        } 
+								}while(choice12!=4);
+						    }
+					    }
+					    break;
+					case 3:
+						if(so_sp==0) printf("Khong co san pham de xoa \n");
+	    				else 
+	    				{
+	    				    string ID_tam;
+	    			     	printf("Nhap ID san phan can xoa ");
+	    				    cin>>ID_tam;
+	    				    for(i=0;i<so_sp;i++) 
+	    				        if(ID_tam==ds_sp[i].ID_sp) 
+	    				            break;
+	    				    if(i==so_sp) 
+								    cout<<"Khong ton tai san pham co ID "<<ID_tam<<"\n";
+	    				    else
+	    				    {   
+							    for(j=i;j<so_sp-1;j++)
+	    					    {						   	    						
+	    						    ds_sp[i].ID_sp=ds_sp[i+1].ID_sp;
+                                    ds_sp[i].ten_sp=ds_sp[i+1].ten_sp;
+	    					 	    ds_sp[i].gia_sp=ds_sp[i+1].gia_sp;  		    					         
+								}
+								so_sp--;
+								luusp();
+								printf("\nXoa san pham thanh cong \n");
+						    }
+					    }					
+				}
+			    } while(choice1!=4);
+			    printf("\n");
+			    break;
+			case 2:
+				printf("Nhap ID don hang ");
+	    		cin>>dh[so_dh].ID_dh;
+	    		printf("Nhap ten khach hang ");
+	    		fflush(stdin);
+	    		getline(cin,dh[so_dh].ten_kh);
+	    		printf("Nhap so dien thoai khach hang ");
+	    		cin>>dh[so_dh].sdt_kh;
+	    		printf("Nhap so dia chi giao hang ");
+	    		fflush(stdin);
+	    		getline(cin,dh[so_dh].diachi);
+	    		printf("Nhap trang thai don dat hang ");
+	    		fflush(stdin);
+	    		getline(cin,dh[so_dh].trangthai);
+	    		printf("Nhap so don vi san pham ");
+	    		cin>>dh[so_dh].sodv_sp;
+	    		dh[so_dh].tongtien=0;
+	    		for(i=0;i<dh[so_dh].sodv_sp;i++)
+	    		    {   
+	    		        char ID_tam[6];
+						printf("Nhap san pham thu %d ",i+1);
+					    do
+					    {   
+					        printf("\nNhap ID san pham ");
+	    		            scanf("%s",ID_tam);
+	    		            for(j=0;j<so_sp;j++)
+	    		               if(ID_tam==ds_sp[j].ID_sp) break;
+	    		            if(j==so_sp) cout<<"Khong ton tai san pham co ID "<<ID_tam<<", vui long nhap lai";
+	    		        }while(j==so_sp);
+	    		        dh[so_dh].ds[i].ID_sp=ID_tam;
+	    		        printf("Nhap so luong san pham ");
+	    		        scanf("%d",&dh[so_dh].ds[i].soluong);
+	    		        dh[so_dh].tongtien+=dh[so_dh].ds[i].soluong*ds_sp[j].gia_sp;
+					}
+				printf("Nhap chiet khau giam gia ");
+				cin>>dh[so_dh].chietkhau;
+				dh[so_dh].tongtien-=dh[so_dh].chietkhau;
+	   			so_dh++;
+	   			luudh();
+	   			printf("Them moi don hang thanh cong \n");
+				break;
+            case 3:
+            	printf("Liet ke tat ca cac san pham theo thu tu bang chu cai tu 'A' den 'Z'");
+            	for(i=0;i<so_sp-1;i++)
+            	    for(j=i+1;j<so_sp;j++)
+            	        if(ds_sp[i].ID_sp<ds_sp[j].ID_sp)
+						    {
+						    PRODUCT sp_tam;
+            	            sp_tam=ds_sp[i];
+            	            ds_sp[i]=ds_sp[j];
+            	            ds_sp[j]=sp_tam;
+            	            }
+            	xuat_sp();
+            	printf("\n");
+				break;
+			case 4:
+				{
+				string thang;
+				if(so_dh==0) 
+				    cout<<"Khong co don hang de liet ke ";
+				else
+				{
+				printf("\nNhap thang can liet ke :");
+				cin>>thang;
+				int sodh=0;
+				if(thang.size()==1) thang.insert(0,"0");
+				for(i=0;i<so_dh;i++)
+				{   
+				    string thang1=dh[i].ID_dh.substr(2,2);
+				    if(thang1==thang) 
+				    {   
+				        sodh++;
+				        xuat_dh(i);
+					}
+				}
+				if(sodh==0) 
+				    cout<<"\nKhong co don hang vao thang "<<thang;
+				}
+				cout<<"\n";
+				break;
+				}
+			case 5:
+				if(so_dh==0) 
+				    cout<<"Khong co don hang de tim ";
+				    else
+				    {
+					    string IDdh;
+					    cout<<"Nhap ID don hang can tim ";
+					    cin>>IDdh;
+					    for(i=0;i<so_dh;i++)
+					        if(IDdh==dh[i].ID_dh)
+					        {
+					            xuat_dh(i);
+					            break;
+					        }
+					    if(i==so_dh) cout<<"Khong co don hang co ID la "<<IDdh<<"\n";
+					}
+				break;
+			case 6:
+				printf("Hien thi tat ca cac san pham theo thu tu gia tang dan ");
+            	for(i=0;i<so_sp-1;i++)
+            	    for(j=i+1;j<so_sp;j++)
+            	        if(ds_sp[i].gia_sp>ds_sp[j].gia_sp)
+						    {
+						    PRODUCT sp_tam;
+            	            sp_tam=ds_sp[i];
+            	            ds_sp[i]=ds_sp[j];
+            	            ds_sp[j]=sp_tam;
+            	            }
+            	xuat_sp();
+            	printf("\n");
+				break;
+			case 7:
+				{
+				string thang;
+				PRODUCT ds_sp1[100];
+				int so_sp1=0;
+				cout<<"Nhap thang ";
+				cin>>thang;
+				if(thang.size()==1) thang.insert(0,"0");
+				for(i=0;i<so_dh;i++)
+				{   
+				    string thang1=dh[i].ID_dh.substr(2,2);
+				    if(thang1==thang) 
+				    {   
+				        for(j=0;j<dh[i].sodv_sp;j++)
+				        {
+						    for(e=0;e<so_sp1;e++)
+						        if(ds_sp1[e].ID_sp==dh[i].ds[j].ID_sp)
+						            break;
+						    ds_sp1[e].ID_sp=dh[i].ds[j].ID_sp;
+						    ds_sp1[e].soluong+=dh[i].ds[j].soluong;
+						    if(e==so_sp1) so_sp1++;
+						}
+					}
+				}
+				if(so_sp1==0) cout<<"Khong co san pham nao duoc ban trong thang "<<thang<<"\n";
+				else
+				{
+			    cout<<"\nSTT       ID        So luong ";
+	            for(i=0;i<so_sp1;i++)
+	              	cout<<"\n"<<i+1<<"        "<<ds_sp1[i].ID_sp<<"      "<<ds_sp1[i].soluong;
+	            cout<<"\n";
+	            }
+				break;
+				}
+			case 8:
+                {
+                PRODUCT ds_sp2[100];
+				int so_sp2=0;
+				string moc1,moc2;
+				cout<<"Nhap moc thoi gian duoi ";
+				cin>>moc1;
+				cout<<"Nhap moc thoi gian tren ";
+				cin>>moc2;
+				for(i=0;i<so_dh;i++)
+				{
+				    bool k=false;
+                    if((moc1.substr(4,4)<dh[i].ID_dh.substr(4,4) && moc2.substr(4,4)>dh[i].ID_dh.substr(4,4))||(moc1.substr(4,4)==dh[i].ID_dh.substr(4,4) && moc2.substr(4,4)>dh[i].ID_dh.substr(4,4))||(moc1.substr(4,4)<dh[i].ID_dh.substr(4,4) && moc2.substr(4,4)==dh[i].ID_dh.substr(4,4)))
+				        k=true;
+					    else
+					        if((moc1.substr(2,2)<dh[i].ID_dh.substr(2,2) && moc2.substr(2,2)>dh[i].ID_dh.substr(2,2)) || (moc1.substr(2,2)==dh[i].ID_dh.substr(2,2) && moc2.substr(2,2)>dh[i].ID_dh.substr(2,2))||(moc1.substr(2,2)<dh[i].ID_dh.substr(2,2) && moc2.substr(2,2)==dh[i].ID_dh.substr(2,2)))			
+				                k=true;
+				                else
+				                    if((moc1.substr(0,2)<=dh[i].ID_dh.substr(2,2) && moc2.substr(0,2)>=dh[i].ID_dh.substr(2,2))) 
+				                        k=true;
+				    if(k==true)
+				    {
+					    for(j=0;j<so_sp;j++)
+					        ds_sp2[j].soluong=0;
+						for(j=0;j<dh[i].sodv_sp;j++)
+						{
+						    for(e=0;e<so_sp2;e++)
+						        if(ds_sp2[e].ID_sp==dh[i].ds[j].ID_sp)
+						            break;
+							ds_sp2[e].ID_sp=dh[i].ds[j].ID_sp;
+							ds_sp2[e].soluong+=dh[i].ds[j].soluong;
+							if(e==so_sp2) so_sp2++;
+						}						
+					}
+				}
+				for(i=0;i<so_sp2-1;i++)
+				    for(j=i+1;j<so_sp2;j++)
+				        if(ds_sp2[i].soluong<ds_sp2[j].soluong)
+				        {
+						    PRODUCT sp_tam;
+            	            sp_tam=ds_sp2[i];
+            	            ds_sp2[i]=ds_sp2[j];
+            	            ds_sp2[j]=sp_tam;			
+						}
+				if(so_sp2==0) cout<<"\nChua co san pham nao duoc ban \n";
+				else
+				{
+				if(so_sp2>5) so_sp2=5;
+				cout<<"\nSTT       ID        So luong ";
+	            for(i=0;i<so_sp2;i++)
+	              	cout<<"\n"<<i+1<<"        "<<ds_sp2[i].ID_sp<<"      "<<ds_sp2[i].soluong;
+	            cout<<"\n";
+				break;
+				}
+				}			
+		}
+	    if(choice<1||choice>9) printf("Chon sai, vui long chon lai !\n");
+	} while(choice!=9);	
+}
